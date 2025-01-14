@@ -2,27 +2,33 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}Deep Work Tracker</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 </head>
 
 <body>
-
     <!-- Navbar -->
     <div id="navbar-app">
-        <nav class="navbar">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a href="/" class="navbar-item"><strong>Deep Work Tracker</strong></a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" :class="{'is-active': isActive}" @click="isActive = !isActive">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
             </div>
 
-            <div class="navbar-menu">
+            <div class="navbar-menu" :class="{'is-active': isActive}">
                 <div class="navbar-end">
                     <a href="{% url "plans" %}" class="navbar-item">Plans</a>
                 
                     <div class="navbar-item">
                         <div class="buttons">
                             <a href="{% url "signup" %}" class="button is-success"><strong>Sign up</strong></a>
-                            <a href="#" class="button">Log in</a>
+                            <a href="{% url "login" %}" class="button">Log in</a>
                         </div>
                     </div>
                 </div>
@@ -37,26 +43,37 @@
      </section>
 
      <footer class="footer">
-        <div class="column is-multiline">
-            <div class="column is-4">
-                <h2 class="subtitle">Deep Work Tracker</h2>
-            </div>
-
+        <div class="container">
+            <div class="columns is-multiline">
+                <div class="column is-4">
+                    <h2 class="subtitle">Deep Work Tracker</h2>
+                </div>
             <div class="column is-offset-6 is-2">
                 <ul>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="{% url "privacy" %}">Privacy policy</a></li>
-                    <li><a href="{% url "terms" %}">Terms of service</a></li>
+                    <li class="mb-2"><a href="#">Contact</a></li>
+                    <li class="mb-2"><a href="{% url "privacy" %}">Privacy policy</a></li>
+                    <li class="mb-2"><a href="{% url "terms" %}">Terms of service</a></li>
                 </ul>
             </div>
-
             <div class="column is-12 has-text-centered">
                 <p>Copyright (c) 2025</p>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
     <!--Scripts-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script>
+            const NavbarApp = {
+                data() {
+                    return {
+                        isActive: false
+                    }
+                }
+            }
+            Vue.createApp(NavbarApp).mount("#navbar-app")
+        </script>
     {% block scripts %}
     {% endblock %}
     <!--End of scripts-->
