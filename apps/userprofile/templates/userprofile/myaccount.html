@@ -25,7 +25,11 @@
 
                 <div>
                     <a href="#" class="button is-info">Edit profile</a>
-                    <a href="#" class="button is-danger">Log out</a>
+                    {% comment %} <a href="{% url "logout" %}" class="button is-danger">Log out</a> {% endcomment %}
+                    <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="button is-danger">Log out</button>
+                    </form>
                 </div>
             </div>
         </div>
