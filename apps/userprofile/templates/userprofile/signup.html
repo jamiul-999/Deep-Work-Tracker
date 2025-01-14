@@ -14,7 +14,7 @@
 
     <div class="columns" id="signup-app">
         <div class="column is-6 is-offset-3">
-            <form method="post" action="." class="mt-6" v-on:submit="validateForm">
+            <form method="post" action="." class="mt-6" v-on:submit="validateForm" novalidate>
                 {% csrf_token %}
                 {% if form.errors %}
                     <div class="notification is-danger">
@@ -85,7 +85,52 @@
                 errors: []
             }
         },
-        delimiters: ['[[', ']]']
+        delimiters: ['[[', ']]'],
+        methods: {
+    validateForm(e) {
+        this.errors = []
+        
+        // Email validation
+        if (!this.username) {
+            this.errors.push("Email is required!")
+        } else if (!this.validateEmail(this.username)) {
+            this.errors.push("Your e-mail address is not valid!")
+        }
+        
+        // Password validation
+        if (!this.password1) {
+            this.errors.push("Password is required")
+        } else {
+            if (this.password1.length < 8) {
+                this.errors.push("The length of password must be at least 8")
+            }
+            if (!isNaN(this.password1)) {
+                this.errors.push("Only numerics are not allowed")
+            }
+        }
+
+        // Password confirmation
+        if (!this.password2) {
+            this.errors.push("Please confirm your password")
+        } else if (this.password1 !== this.password2) {
+            this.errors.push("Passwords don't match!!")
+        }
+
+        if (this.errors.length) {
+            e.preventDefault()
+            return false
+        } else {
+            return true
+        }
+    },
+            
+            validateEmail(email) {
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+                    return true
+                }
+                return false
+            }
+        }
     }
     Vue.createApp(SignupApp).mount("#signup-app")
 </script>
