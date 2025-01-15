@@ -21,21 +21,21 @@
                     <div class="field">
                         <label class="label">First name</label>
                         <div class="control">
-                            <input class="input"{% if request.user.first_name %} value="{{ request.user.first_name }}"{% endif %}>
+                            <input type="text" name="first_name" class="input"{% if request.user.first_name %} value="{{ request.user.first_name }}"{% endif %}>
                         </div>
                     </div>
 
                     <div class="field">
                         <label class="label">Last name</label>
                         <div class="control">
-                            <input class="input"{% if request.user.last_name %} value="{{ request.user.last_name }}"{% endif %}>
+                            <input type="text" name="last_name" class="input"{% if request.user.last_name %} value="{{ request.user.last_name }}"{% endif %}>
                         </div>
                     </div>
 
                     <div class="field">
                         <label class="label">E-mail</label>
                         <div class="control">
-                            <input class="input"{% if request.user.email %} value="{{ request.user.email }}"{% endif %}>
+                            <input type="email" name="email" class="input"{% if request.user.email %} value="{{ request.user.email }}"{% endif %}>
                         </div>
                     </div>
 
@@ -44,5 +44,9 @@
                             <button class="button is-success">Save changes</button>
                         </div>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </div>
 {% endblock %}
