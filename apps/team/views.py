@@ -1,9 +1,24 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 from .models import Team
 # Create your views here.
+
+@login_required
+def team(request, team_id):
+    team = get_object_or_404(Team, pk=team_id, status=Team.ACTIVE, members__in=[request.user])
+    return render(request, "team/team.html", {"team": team})
+
+@login_required
+def activate_team(request, team_id):
+    team = get_object_or_404(Team, pk=team_id, status=Team.ACTIVE, members__in=[request.user])
+    userprofile = request.user.userprofile
+    userprofile.active_team_id = team.id
+    userprofile.save()
+    
+    messages.info(request, "The team was activated")
+    return redirect("team:team", team_id=team.id)
 
 @login_required
 def add(request):
@@ -22,3 +37,19 @@ def add(request):
             return redirect("myaccount")
     
     return render(request, "team/add.html")
+
+@login_required
+def edit(request):
+    team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE, members__in=[request.user])
+    if request.method == "POST":
+        title = request.POST.get("title")
+        
+        if title:
+            team.title = title
+            team.save()
+            
+            messages.info(request, "The changes were saved")
+            
+            return redirect("team:team", team_id=team.id)
+    return render(request, "team/edit.html", {"team": team})
+        
