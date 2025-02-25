@@ -7,3 +7,4 @@ def active_team(request):
             
             return {"active_team": team}
         return {"active_team": None}
+    return {"active_team": None}
