@@ -27,7 +27,8 @@
                 <p class="is-size-7">Tasks: {{ project.num_tasks_todo }}</p>
 
                 <hr>
-                <a href="#" class="button is-success">Details</a>
+                
+                <a href="{% url "project:project" project.id %}" class="button is-success">Details</a>
             </div>
         </div>
         {% empty %}
