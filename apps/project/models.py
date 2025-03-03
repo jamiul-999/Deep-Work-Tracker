@@ -56,7 +56,7 @@ class Entry(models.Model):
     minutes = models.IntegerField(default=0)
     is_tracked = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, related_name="entries", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
     
     class Meta:
         ordering = ["-created_at"]

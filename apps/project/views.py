@@ -1,9 +1,9 @@
-
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Project, Task
+from .models import Project, Task, Entry
 from apps.team.models import Team
 
 @login_required
@@ -35,7 +35,7 @@ def project(request, project_id):
     tasks_todo = project.tasks.filter(status=Task.TODO)
     tasks_done = project.tasks.filter(status=Task.DONE)
         
-    return render(request, "project/project.html", {"team": team, "project": project, "tasks_todo": tasks_todo})
+    return render(request, "project/project.html", {"team": team, "project": project, "tasks_todo": tasks_todo, "tasks_done": tasks_done})
 
 @login_required
 def edit_project(request, project_id):
@@ -60,7 +60,18 @@ def task(request, project_id, task_id):
     project = get_object_or_404(Project, team=team, pk=project_id)
     task = get_object_or_404(Task, pk=task_id, team=team)
     
-    return render(request, "project/task.html", {"team": team, "project": project, "task": task})
+    if request.method == "POST":
+        hours = int(request.POST.get("hours", 0))
+        minutes = int(request.POST.get("minutes", 0))
+        date_str = request.POST.get("date")
+        time_str = datetime.now().strftime("%H:%M:%S")
+        date = f"{date_str} {time_str}"
+        #date = "%s %s" % (request.POST.get("date"), datetime.now().time())
+        minutes_total = (hours * 60) + minutes 
+        
+        entry = Entry.objects.create(team=team, project=project, task=task, minutes=minutes_total, created_by=request.user, created_at=date)
+    
+    return render(request, "project/task.html", {"today": datetime.today(), "team": team, "project": project, "task": task})
 
 @login_required
 def edit_task(request, project_id, task_id):
