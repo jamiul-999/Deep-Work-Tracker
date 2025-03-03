@@ -26,7 +26,7 @@ def project(request, project_id):
     team = get_object_or_404(Team, pk=request.user.userprofile.active_team_id, status=Team.ACTIVE)
     project = get_object_or_404(Project, team=team, pk=project_id)
     if request.method == "POST":
-        title = request.GET>get("title")
+        title = request.GET.get("title")
         
         if title:
             task = Task.objects.create(team=team, project=project, title=title)
